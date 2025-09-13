@@ -249,9 +249,9 @@ class WindowClass(QMainWindow, form_class) :
                 pred_pob_coll = nn.Softmax(dim=1)(pred_var_coll)
                 predConf = (torch.abs(pred_pob[0][1] - 0.5) * 2).item()
                 predCollConf = (torch.abs(pred_pob_coll[0][1] - 0.5) * 2).item()
-                if predConf < 0.4:  #
+                if predConf < 0.35:  #
                     if predCollConf > predConf:
-                        pred_var[0] = pred_pob_coll[0]
+                        pred_var[0] = (pred_pob_coll[0] + pred_pob[0])/2
                 _, pred = pred_var.topk(1, 1, True, True)
                 # print(pred)
                 pred = pred.t()[0][0].item()
@@ -347,3 +347,4 @@ if __name__ == "__main__" :
     myWindow = WindowClass()
     myWindow.show()
     app.exec_()
+
